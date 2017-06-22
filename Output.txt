@@ -1,0 +1,16 @@
+zpid,10943524
+links,OrderedDict([(u'homedetails', u'http://www.zillow.com/homedetails/627-Morrison-St-Mc-Clellanville-SC-29458/10943524_zpid/'), (u'graphsanddata', u'http://www.zillow.com/homedetails/627-Morrison-St-Mc-Clellanville-SC-29458/10943524_zpid/#charts-and-data'), (u'mapthishome', u'http://www.zillow.com/homes/10943524_zpid/'), (u'comparables', u'http://www.zillow.com/homes/comps/10943524_zpid/')])
+address,OrderedDict([(u'street', u'627 Morrison St'), (u'zipcode', u'29458'), (u'city', u'Mc Clellanville'), (u'state', u'SC'), (u'latitude', u'33.08515'), (u'longitude', u'-79.465975')])
+FIPScounty,45019
+useCode,SingleFamily
+taxAssessmentYear,2010
+taxAssessment,170000.0
+yearBuilt,1985
+lotSizeSqFt,17859
+finishedSqFt,1225
+bathrooms,1.0
+bedrooms,1
+lastSoldDate,04/08/2013
+lastSoldPrice,OrderedDict([(u'@currency', u'USD'), ('#text', u'165000')])
+zestimate,OrderedDict([(u'amount', OrderedDict([(u'@currency', u'USD'), ('#text', u'264098')])), (u'last-updated', u'06/19/2017'), (u'oneWeekChange', OrderedDict([(u'@deprecated', u'true')])), (u'valueChange', OrderedDict([(u'@duration', u'30'), (u'@currency', u'USD'), ('#text', u'-4248')])), (u'valuationRange', OrderedDict([(u'low', OrderedDict([(u'@currency', u'USD'), ('#text', u'192792')])), (u'high', OrderedDict([(u'@currency', u'USD'), ('#text', u'306354')]))])), (u'percentile', u'0')])
+localRealEstate,OrderedDict([(u'region', OrderedDict([(u'@name', u'Mc Clellanville'), (u'@id', u'46459'), (u'@type', u'city'), (u'zindexValue', u'203,700'), (u'links', OrderedDict([(u'overview', u'http://www.zillow.com/local-info/SC-Mc-Clellanville/r_46459/'), (u'forSaleByOwner', u'http://www.zillow.com/mc-clellanville-sc/fsbo/'), (u'forSale', u'http://www.zillow.com/mc-clellanville-sc/')]))]))])
