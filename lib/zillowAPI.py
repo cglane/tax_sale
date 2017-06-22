@@ -18,19 +18,20 @@ class ZillowAPI(object):
             result = my_dict['SearchResults:searchresults']['response']['results']['result']
         else:
             result = my_dict['SearchResults:searchresults']['response']['results']['result']
+            print result
             self.zillow_data = {
-            'zpid': result['zpid'],
-            'latitude': result['address']['latitude'],
-            'longitude': result['address']['longitude'],
-            'useCode': result['useCode'],
-            'taxAssesmentYear': result['taxAssesmentYear'],
-            'taxAssesment': result['taxAssesment'],
-            'yearBuilt': result['yearBuilt'],
-            'lotSizeSqFt': result['lotSizeSqFt'],
-            'bathrooms': result['bathrooms'],
-            'bedrooms': result['bedrooms'],
-            'lastSoldDate': result['lastSoldDate'],
-            'lastSoldPrice': result['lastSoldPrice']['#text'],
-            'zestimate': result['zestimate']['#text']
+                'zpid': result['zpid'],
+                'latitude': result['address']['latitude'],
+                'longitude': result['address']['longitude'],
+                'useCode': result['useCode'],
+                'taxAssessmentYear': result['taxAssessmentYear'],
+                'taxAssessment': result['taxAssessment'],
+                'yearBuilt': result['yearBuilt'],
+                'lotSizeSqFt': result['lotSizeSqFt'],
+                'bathrooms': result['bathrooms'],
+                'bedrooms': result['bedrooms'],
+                'lastSoldDate': result['lastSoldDate'],
+                'lastSoldPrice': result['lastSoldPrice']['#text'],
+                'zestimate': result['zestimate']['amount']['#text']
             }
             return self.zillow_data

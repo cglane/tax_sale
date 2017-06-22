@@ -3,10 +3,10 @@ import xmltodict, json
 from bs4 import BeautifulSoup
 Zillow_API_Key = 'X1-ZWz195za60umff_728x4'
 
-class CharlestonCounty(object):
+class WebParser(object):
     """Parser getting property info in Charleston County Per Property Pin"""
     def __init__(self, propertyPin):
-        super(CharlestonCounty, self).__init__()
+        super(WebParser, self).__init__()
         self.property_data = {}
         self.propertyPin = propertyPin
         self.zillowAddressQuery = ''
@@ -35,13 +35,13 @@ class CharlestonCounty(object):
         else:
             data = self.getOtherData(soup)
             self.property_data = {
-                    'address' : list_data[2].get_text(),
-                    'owner_address' : font_data[33].get_text(),
+                    'address' : list_data[2].get_text('', strip=True),
+                    'owner_address' : font_data[33].get_text('', strip=True),
             }
             return self.property_data
 
-        def formatAddressForZillow(self, stateCode='SC'):
-            address_list = self.property_data.address.split(',')
-            zillow_address = '+'.join(address_list[0].split(' '))
-            zillow_city = ''.join(address_list[1].split(' '))
-            return '&address='+zillow_address+'&citystatezip='+zillow_city+'%2C+'+stateCode
+    def formatAddressForZillow(self, stateCode='SC'):
+        address_list = self.property_data['address'].split(',')
+        zillow_address = '+'.join(address_list[0].split(' '))
+        zillow_city = ''.join(address_list[1].split(' '))
+        return ('&address='+zillow_address+'&citystatezip='+zillow_city+'%2C+'+stateCode)
