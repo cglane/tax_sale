@@ -1,6 +1,9 @@
 import requests
 import xmltodict, json
+from collections import defaultdict
+from yattag import indent
 ZILLOW_API_KEY = 'X1-ZWz195za60umff_728x4'
+
 
 class ZillowAPI(object):
     """docstring for ZillowAPI."""
@@ -11,27 +14,30 @@ class ZillowAPI(object):
         self.zillow_data = {}
     def queryZillow(self, zillow_address):
         run_url = "http://www.zillow.com/webservice/GetDeepSearchResults.htm?zws-id="+ZILLOW_API_KEY+zillow_address
-        my_dict = xmltodict.parse(requests.get(run_url).content)
+        zillow_response = requests.get(run_url).content
+        print zillow_response
+        my_dict = xmltodict.parse(indent(zillow_response).encode('utf-8'))
         # If successful will response with "Request successfully processed"
         message = my_dict['SearchResults:searchresults']['message']
-        if(message == 'Request successfully processed'):
-            result = my_dict['SearchResults:searchresults']['response']['results']['result']
+        print message
+        if(message['text'] != 'Request successfully processed'):
+            print ('Address not found: zillow_address:', zillow_address)
+            return {}
         else:
             result = my_dict['SearchResults:searchresults']['response']['results']['result']
-            print result
-            self.zillow_data = {
-                'zpid': result['zpid'],
-                'latitude': result['address']['latitude'],
-                'longitude': result['address']['longitude'],
-                'useCode': result['useCode'],
-                'taxAssessmentYear': result['taxAssessmentYear'],
-                'taxAssessment': result['taxAssessment'],
-                'yearBuilt': result['yearBuilt'],
-                'lotSizeSqFt': result['lotSizeSqFt'],
-                'bathrooms': result['bathrooms'],
-                'bedrooms': result['bedrooms'],
-                'lastSoldDate': result['lastSoldDate'],
-                'lastSoldPrice': result['lastSoldPrice']['#text'],
-                'zestimate': result['zestimate']['amount']['#text']
+            zillow_data = {
+                'zpid': result.get('zpid'),
+                'latitude': result.get('address')['latitude'],
+                'longitude': result.get('address')['longitude'],
+                'taxAssessmentYear': result.get('taxAssessmentYear'),
+                'taxAssessment': result.get('taxAssessment'),
+                'yearBuilt': result.get('yearBuilt'),
+                'lotSizeSqFt': result.get('lotSizeSqFt'),
+                'bathrooms': result.get('bathrooms'),
+                'bedrooms': result.get('bedrooms'),
+                'lastSoldDate': result.get('lastSoldDate'),
+                'lastSoldPrice': result.get('lastSoldPrice')['#text'],
+                'zestimate': result.get('zestimate').get('amount').get('#text')
+
             }
-            return self.zillow_data
+            return zillow_data

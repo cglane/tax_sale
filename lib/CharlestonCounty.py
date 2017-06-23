@@ -34,9 +34,11 @@ class WebParser(object):
             return {}
         else:
             data = self.getOtherData(soup)
+            owner_address = font_data[33].get_text('', strip=True)
             self.property_data = {
-                    'address' : list_data[2].get_text('', strip=True),
-                    'owner_address' : font_data[33].get_text('', strip=True),
+                    'address': list_data[2].get_text('', strip=True),
+                    'owner_address': " ".join(owner_address.split()),
+                    'property_code': font_data[35].get_text('', strip=True)
             }
             return self.property_data
 
