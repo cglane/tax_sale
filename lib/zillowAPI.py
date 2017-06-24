@@ -2,15 +2,15 @@ import requests
 import xmltodict, json
 from collections import defaultdict
 from yattag import indent
-ZILLOW_API_KEY = 'X1-ZWz195za60umff_728x4'
 
 
 class ZillowAPI(object):
     """docstring for ZillowAPI."""
-    def __init__(self, address, state ='SC'):
+    def __init__(self, address, apiKey,  state ='SC'):
         super(ZillowAPI, self).__init__()
         self.address = address
         self.state = state
+        self.apiKey = apiKey
         self.zillow_data = {}
         self.zillow_dict = {
                 'zpid': '',
@@ -29,12 +29,17 @@ class ZillowAPI(object):
     def queryZillow(self):
         if (not self.address):
             return self.zillow_dict
-        run_url = "http://www.zillow.com/webservice/GetDeepSearchResults.htm?zws-id="+ZILLOW_API_KEY+self.address
+        run_url = "http://www.zillow.com/webservice/GetDeepSearchResults.htm?zws-id="+self.apiKey+self.address
         zillow_response = requests.get(run_url).content
-        my_dict = xmltodict.parse(indent(zillow_response).encode('utf-8'))
+        try:
+            my_dict = xmltodict.parse(indent(zillow_response).encode('utf-8'))
+        except Exception as e:
+            print 'XMLparsing error'
+            return False
         # If successful will response with "Request successfully processed"
         message = my_dict['SearchResults:searchresults']['message']
         if(message['text'] != 'Request successfully processed'):
+            print message
             print ('Address not found: zillow_address:', self.address)
             return self.zillow_dict
         else:
@@ -51,9 +56,13 @@ class ZillowAPI(object):
                     'bathrooms': result[0].get('bathrooms'),
                     'bedrooms': result[0].get('bedrooms'),
                     'lastSoldDate': result[0].get('lastSoldDate'),
-                    'lastSoldPrice': result[0].get('lastSoldPrice')['#text'],
                     'zestimate': result[0].get('zestimate').get('amount').get('#text')
                 }
+                try:
+                    lastSoldPrice = result[0].get('lastSoldPrice')['#text']
+                    zillow_data['lastSoldPrice'] = lastSoldPrice
+                except Exception as e:
+                    zillow_data['lastSoldPrice'] = ''
             else:
                 zillow_data = {
                     'zpid': result.get('zpid'),
@@ -66,7 +75,12 @@ class ZillowAPI(object):
                     'bathrooms': result.get('bathrooms'),
                     'bedrooms': result.get('bedrooms'),
                     'lastSoldDate': result.get('lastSoldDate'),
-                    'lastSoldPrice': result.get('lastSoldPrice')['#text'],
                     'zestimate': result.get('zestimate').get('amount').get('#text')
                 }
+                try:
+                    lastSoldPrice = result.get('lastSoldPrice')['#text']
+                    zillow_data['lastSoldPrice'] = lastSoldPrice
+                except Exception as e:
+                    zillow_data['lastSoldPrice'] = ''
+            print 'Succesful call to Zillow'
             return zillow_data

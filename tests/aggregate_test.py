@@ -11,7 +11,7 @@ class TestStringMethods(unittest.TestCase):
     """This is For Testing."""
     def test_write_and_query(self):
         """Read from csv and query zillow"""
-        Aggregation = AggregateData('governmax-test', governmax_api_key, '../data/data-test.csv')
+        Aggregation = AggregateData('governmax-test', '../data/data-test.csv')
         Aggregation.writeAndQuery()
         test_data = [x for x in csv.DictReader(open('../data/data-test.csv'))]
         self.assertEqual(test_data[0]['latitude'], '32.625842')

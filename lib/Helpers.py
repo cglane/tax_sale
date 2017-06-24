@@ -9,5 +9,3 @@ def formatAddressForZillow(address, stateCode='SC'):
         zillow_address = '+'.join(address_list[0].split(' '))
         zillow_city = ''.join(address_list[1].split(' '))
         return ('&address='+zillow_address+'&citystatezip='+zillow_city+'%2C+'+stateCode)
-    else:
-        return ''
