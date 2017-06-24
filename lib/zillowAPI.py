@@ -12,19 +12,31 @@ class ZillowAPI(object):
         self.address = address
         self.state = state
         self.zillow_data = {}
-    def queryZillow(self, zillow_address):
-        run_url = "http://www.zillow.com/webservice/GetDeepSearchResults.htm?zws-id="+ZILLOW_API_KEY+zillow_address
+    def queryZillow(self):
+        run_url = "http://www.zillow.com/webservice/GetDeepSearchResults.htm?zws-id="+ZILLOW_API_KEY+self.zillow_address
         zillow_response = requests.get(run_url).content
-        print zillow_response
         my_dict = xmltodict.parse(indent(zillow_response).encode('utf-8'))
         # If successful will response with "Request successfully processed"
         message = my_dict['SearchResults:searchresults']['message']
-        print message
         if(message['text'] != 'Request successfully processed'):
             print ('Address not found: zillow_address:', zillow_address)
-            return {}
+            return {
+                'zpid': '',
+                'latitude': '',
+                'longitude': '',
+                'taxAssessmentYear': '',
+                'taxAssessment': '',
+                'yearBuilt': '',
+                'lotSizeSqFt': '',
+                'bathrooms': '',
+                'bedrooms': '',
+                'lastSoldDate': '',
+                'lastSoldPrice': '',
+                'zestimate': ''
+            }
         else:
             result = my_dict['SearchResults:searchresults']['response']['results']['result']
+            print result
             zillow_data = {
                 'zpid': result.get('zpid'),
                 'latitude': result.get('address')['latitude'],

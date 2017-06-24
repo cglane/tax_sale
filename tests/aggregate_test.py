@@ -25,7 +25,7 @@ class TestStringMethods(unittest.TestCase):
         dictionay_list = Aggregation.buildDictionaryList('test')
         self.assertEqual(dictionay_list[0]['property_code'], '905 - VAC-RES-LOT')
     def test_build_and_write(self):
-        Aggregation = AggregateData(['test'], governmax_api_key)
+        Aggregation = AggregateData(['2012'], governmax_api_key)
         Aggregation.buildAndWrite()
 if __name__ == '__main__':
     unittest.main()
