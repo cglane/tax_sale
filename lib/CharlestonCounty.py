@@ -66,9 +66,3 @@ class WebParser(object):
                 governmax_data['auction_year'] = fileName
                 merged_dict = merge_two_dicts(row, governmax_data)
                 self.writeRowToFile(exportPath, merged_dict)
-
-    def formatAddressForZillow(self, stateCode='SC'):
-        address_list = self.property_data['address'].split(',')
-        zillow_address = '+'.join(address_list[0].split(' '))
-        zillow_city = ''.join(address_list[1].split(' '))
-        return ('&address='+zillow_address+'&citystatezip='+zillow_city+'%2C+'+stateCode)

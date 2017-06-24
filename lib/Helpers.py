@@ -3,8 +3,11 @@ def merge_two_dicts(x, y):
     z = x.copy()
     z.update(y)
     return z
-def formatAddressForZillow(property_data, stateCode='SC'):
-    address_list = property_data['address'].split(',')
-    zillow_address = '+'.join(address_list[0].split(' '))
-    zillow_city = ''.join(address_list[1].split(' '))
-    return ('&address='+zillow_address+'&citystatezip='+zillow_city+'%2C+'+stateCode)
+def formatAddressForZillow(address, stateCode='SC'):
+    if(address):
+        address_list = address.split(',')
+        zillow_address = '+'.join(address_list[0].split(' '))
+        zillow_city = ''.join(address_list[1].split(' '))
+        return ('&address='+zillow_address+'&citystatezip='+zillow_city+'%2C+'+stateCode)
+    else:
+        return ''

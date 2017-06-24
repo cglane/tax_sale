@@ -1,19 +1,15 @@
 import csv
-from lib.PropertyData import getPropertyInfo
 from lib.Helpers import merge_two_dicts, formatAddressForZillow
 from lib.zillowAPI import ZillowAPI
 
 
 class AggregateData(object):
     """docstring for AggregateData."""
-    def __init__(self, fileList, governmax_api_key):
+    def __init__(self, fileName, governmax_api_key, exportPath):
         super(AggregateData, self).__init__()
-        self.fileList = fileList
+        self.fileName = fileName
         self.governmax_api_key = governmax_api_key
-    def readCSV(self, fileName):
-        """Reads a csv file into dictionary."""
-        csv_dict = csv.DictReader(open("../data/"+fileName+".csv"))
-        return[x for x in csv_dict]
+        self.exportPath = exportPath
     def getZillowData(self, csvObj):
         """Queries Zillow and Governmax for data"""
         zillow_address = formatAddressForZillow(csvObj['address'])
@@ -30,12 +26,14 @@ class AggregateData(object):
                 writer.writerow(data_dict)
             else:
                 writer.writerow(data_dict)
-    def writeAndQuery(self, fileName, exportPath):
+            export.close()
+    def writeAndQuery(self):
         "Read write and query."
-        fileDict = [x for x in csv.DictReader(open('../data/'+fileName+'.csv'))]
-        export_file_contents = [x for x in csv.DictReader(open(exportPath))]
+        fileDict = [x for x in csv.DictReader(open('../data/'+self.fileName+'.csv'))]
+        export_file_contents = [x for x in csv.DictReader(open(self.exportPath))]
+        print export_file_contents
         for itr, row in enumerate(fileDict):
             if not any(d['Pin'] == row['Pin'] for d in export_file_contents):
                 zillow_data = self.getZillowData(row)
                 merged_dict = merge_two_dicts(row, zillow_data)
-                self.writeRowToFile(exportPath, merged_dict)
+                self.writeRowToFile(self.exportPath, merged_dict)
