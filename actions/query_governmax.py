@@ -3,7 +3,9 @@ sys.path.append(os.path.abspath(os.path.join('..')))
 from lib.CharlestonCounty import WebParser
 
 
-governmax_api_key = 'E4D2DBDC03F14F9792D58D89BFB30CC7'
+governmax_api_key = '72477E9A8976468CADD1CC57631BDC8F'
+
 
 Governmax = WebParser(governmax_api_key)
-Governmax.writeAndQuery('2014', exportPath='../data/governmax-2014.csv')
+Governmax.writeAndQuery('2013', exportPath='../data/data-2013.csv')
+Governmax.writeAndQuery('2014', exportPath='../data/data-2014.csv')

@@ -5,7 +5,7 @@ locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
 from lib.Helpers import merge_two_dicts
 from lib.Helpers import stripWhiteSpace
 from lib.Helpers import returnObjInList
-
+from lib.GoogleAPI import LocationData
 import xmltodict, json
 from bs4 import BeautifulSoup
 Zillow_API_Key = 'X1-ZWz195za60umff_728x4'
@@ -97,7 +97,7 @@ class WebParser(object):
         """Aggregate Data from all tables."""
         if(self.tables):
             overview = self.getOverview()
-            current_parcel = self.getOverview()
+            current_parcel = self.getCurrentParcelInfo()
             historic_info = self.getHistoricInformation()
             sales_disclosure = self.getSalesDisclosure()
             improvements = self.getImprovements()
@@ -127,9 +127,22 @@ class WebParser(object):
         "Read write and query."
         fileDict = [x for x in csv.DictReader(open('../imports/'+fileName+'.csv'))]
         export_file_contents = [x for x in csv.DictReader(open(exportPath))]
+        google_api = LocationData()
+        faulty_pins = []
         for itr, row in enumerate(fileDict):
             if not any(d['Pin'] == row['Pin'] for d in export_file_contents):
-                governmax_data = self.getDataByPin(row['Pin'])
-                governmax_data['auction_year'] = fileName
-                merged_dict = merge_two_dicts(row, governmax_data)
-                self.writeRowToFile(exportPath, merged_dict)
+                try:
+                    self.getSoup(row['Pin'])
+                    print row['Pin']
+                    governmax_data = self.aggregateData(fileName)
+                    governmax_data['auction_year'] = fileName
+                    latLng = google_api.getLatLong(governmax_data['Parcel Address'])
+                    government_data = merge_two_dicts(row, governmax_data)
+                    google_and_gov = merge_two_dicts(government_data, latLng)
+                    self.writeRowToFile(exportPath, google_and_gov)
+                    print ('Success with pin', row['Pin'])
+                except Exception as e:
+                    print e
+                    faulty_pins.append(row['Pin'])
+                    print ('Error with pin:', row['Pin'])
+        print (faulty_pins)
