@@ -4,7 +4,7 @@ import csv
 sys.path.append(os.path.abspath(os.path.join('..')))
 from lib.CharlestonCounty import WebParser
 from lib.zillowAPI import ZillowAPI
-property_pin = '6220000004'
+property_pin = '2030000115'
 governmax_api_key = 'BEBF3C1F72E84A1C9E28BA17F0EDD369'
 
 
